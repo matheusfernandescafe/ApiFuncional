@@ -34,6 +34,12 @@ public class ProdutosController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<Produto>> PostProduto(Produto produto)
     {
+        if (!ModelState.IsValid)
+            return ValidationProblem(new ValidationProblemDetails(ModelState)
+            {
+                Title = "Um ou mais erros de validação ocorreram!"
+            });
+
         await _context.Produtos.AddAsync(produto);
         await _context.SaveChangesAsync();
 
@@ -41,8 +47,14 @@ public class ProdutosController : ControllerBase
     }
 
     [HttpPut("{id:Guid}")]
-    public async Task<ActionResult<Produto>> PutProduto(Produto produto)
+    public async Task<ActionResult<Produto>> PutProduto(Guid id, Produto produto)
     {
+        if (id != produto.Id)
+            return BadRequest();
+
+        if (!ModelState.IsValid)
+            return ValidationProblem(ModelState);
+
         _context.Produtos.Update(produto);
         await _context.SaveChangesAsync();
 
