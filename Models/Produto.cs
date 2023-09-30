@@ -5,7 +5,7 @@ namespace ApiFuncional.Models;
 public class Produto
 {
     [Key]
-    public int Id { get; set; }
+    public Guid Id { get; set; } = Guid.NewGuid();
 
     [Required(ErrorMessage = "O campo {0} é obrigatório")]
     public string? Nome { get; set; }
